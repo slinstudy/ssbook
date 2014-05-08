@@ -1,15 +1,15 @@
-from django.shortcuts import render
-from django import forms
-from django.template import RequestContext,Context
-from django.http import HttpResponse, HttpResponseRedirect
+import json
+import requests
+
+from django.template import RequestContext
+from django.http import HttpResponse
 from django.template.loader import get_template
 from django.core.paginator import Paginator
-from django.core.urlresolvers import reverse
+
 
 
 # app specific files
 
-from .models import *
 from .forms import *
 
 
@@ -43,6 +43,27 @@ def list_book(request):
     return HttpResponse(t.render(c))
 
 
+def view_douban_book(request, id):
+    # book_instance = Book.objects.get(id=id)
+    # response = requests.get("https://api.douban.com/v2/book/" + id + "?fields=id,title,url,isbn13")
+    response = requests.get("https://api.douban.com/v2/book/isbn/" + id )
+
+    book_instance = json.loads(response.text)
+    t = get_template("book/view_book.html")
+    c = RequestContext(request, locals())
+    return HttpResponse(t.render(c))
+
+
+def view_opac_book(request, id):
+    # book_instance = Book.objects.get(id=id)
+    # response = requests.get("https://api.douban.com/v2/book/" + id + "?fields=id,title,url,isbn13")
+    response = requests.get("http://10.0.1.1/NTRdrBookRetr.aspx?strType=isbn&strKeyValue="+id+"&strSortType=&strpageNum=10&strSort=desc" + id )
+    book_instance=response.text
+    #book_instance = json.loads(response.text)
+    t = get_template("book/view_book.html")
+    c = RequestContext(request, locals())
+    return HttpResponse(t.render(c))
+
 
 def view_book(request, id):
     book_instance = Book.objects.get(id=id)
@@ -52,6 +73,7 @@ def view_book(request, id):
     return HttpResponse(t.render(c))
     # context=Context({'book_instance',book_instance})
     # return render(request,"book/view_book.html",context)
+
 
 def edit_book(request, id):
     book_instance = Book.objects.get(id=id)
