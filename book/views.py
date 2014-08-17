@@ -9,9 +9,7 @@ from django.core.paginator import Paginator
 
 
 # app specific files
-
 from .forms import *
-
 
 
 # Create your views here.
@@ -48,6 +46,7 @@ def view_douban_book(request, id):
     # response = requests.get("https://api.douban.com/v2/book/" + id + "?fields=id,title,url,isbn13")
     response = requests.get("https://api.douban.com/v2/book/isbn/" + id )
 
+    # book_instance = json.loads(response.text)
     book_instance = json.loads(response.text)
     t = get_template("book/view_book.html")
     c = RequestContext(request, locals())
@@ -57,7 +56,7 @@ def view_douban_book(request, id):
 def view_opac_book(request, id):
     # book_instance = Book.objects.get(id=id)
     # response = requests.get("https://api.douban.com/v2/book/" + id + "?fields=id,title,url,isbn13")
-    response = requests.get("http://10.0.1.1/NTRdrBookRetr.aspx?strType=isbn&strKeyValue="+id+"&strSortType=&strpageNum=10&strSort=desc" + id )
+    response = requests.get('http://10.0.1.1/NTRdrBookRetr.aspx?strType=isbn&strKeyValue=' +id+"&strSortType=&strpageNum=10&strSort=desc" + id )
     book_instance=response.text
     #book_instance = json.loads(response.text)
     t = get_template("book/view_book.html")

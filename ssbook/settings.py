@@ -60,8 +60,26 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'ilas': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': "ilas",
+        "HOST":"10.0.1.17",
+        "DATABASE_USER":'ilas',
+        "DATABASE_PASSWORD":'ilas',
     }
+
 }
+
+# DATABASES = {
+#     'ilas': {
+#         'ENGINE': 'django.db.backends.oracle',
+#         'NAME': "ilas",
+#         "HOST":"10.0.1.17",
+#         "DATABASE_USER":'ilas',
+#         "DATABASE_PASSWORD":'ilas',
+#     }
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -88,3 +106,8 @@ TEMPLATE_DIRS = (
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    BASE_DIR+STATIC_URL,
+)
+
